@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - PC Hardware Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Lộc Computer</h1>
+        <button class="menu-toggle">☰</button>
+        <nav class="nav-menu">
+            <a href="index.html">Trang chủ</a>
+            <a href="products.html">Sản phẩm</a>
+            <a href="cart.html" id="cart-link">Giỏ hàng (0)</a>
+        </nav>
+    </header>
+
+    <section class="cart">
+        <h2>Danh sách sản phẩm</h2>
+        <div id="cart-items">
+            <p class="empty-cart">Giỏ hàng trống!</p>
+        </div>
+        <div class="cart-total">
+            <h3>Tổng cộng: <span id="total-price">0₫</span></h3>
+            <button id="checkout-btn">Thanh toán</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>Về Lộc Computer</h3>
+                <p>Có cái gì đâu mà giới thiệu hẹ hẹhẹ.</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="products.html">Sản phẩm</a></li>
+                    <li><a href="cart.html">Giỏ hàng</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Điều khoản dịch vụ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact">
+                <h3>Liên hệ</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Bây giờ đang ở bên kia sông. </p>
+                <p><i class="fas fa-phone"></i> Nào có rồi cho </p>
+                <p><i class="fas fa-envelope"></i> mail giả không àà </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Lộc Computer | All Rights Reserved
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

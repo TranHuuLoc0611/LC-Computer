@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lộc Computer</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body class="home-page">
+    <!--Header-->
+    <header>
+        <h1>Lộc Computer</h1>
+        <button class="menu-toggle">☰</button>
+        <nav class="nav-menu">
+            <a href="index.html">Trang chủ</a>
+            <a href="products.html">Sản phẩm</a>
+            <a href="cart.html" id="cart-link">Giỏ hàng (0)</a>
+        </nav>
+    </header>
+
+    <!-- Banner -->
+    <section class="banner">
+        <img src="images/lc-computer-logo.png" alt="Banner">
+    </section>
+
+    <!-- About us -->
+    <section class="about-us">
+        <div class="container">
+            <h2>Về Lộc Computer</h2>
+            <p>
+                Lộc Computer là điểm đến tin cậy cho những người đam mê công nghệ và game thủ.
+                Chúng tôi chuyên cung cấp các linh kiện PC chính hãng, chất lượng cao từ các thương hiệu hàng đầu thế
+                giới,
+                đảm bảo hiệu năng tối ưu và trải nghiệm tuyệt vời cho mọi nhu cầu.
+            </p>
+            <p>
+                Với đội ngũ chuyên gia tận tâm và dịch vụ hỗ trợ khách hàng chu đáo,
+                chúng tôi cam kết mang đến những sản phẩm tốt nhất và giải pháp tối ưu cho hệ thống máy tính của bạn.
+            </p>
+            <a href="#" class="btn-learn-more">Tìm hiểu thêm</a>
+        </div>
+    </section>
+
+    <!-- Why choose us -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h2>Tại sao chọn Lộc Computer?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-truck-fast"></i>
+                    <h3>Giao hàng siêu tốc</h3>
+                    <p>Luôn đảm bảo sản phẩm đến tay bạn nhanh nhất có thể.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Bảo hành uy tín</h3>
+                    <p>Chính sách bảo hành rõ ràng, hỗ trợ nhiệt tình.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-headset"></i>
+                    <h3>Hỗ trợ 24/7</h3>
+                    <p>Đội ngũ chuyên gia luôn sẵn sàng giải đáp mọi thắc mắc.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Giá cả cạnh tranh</h3>
+                    <p>Cam kết giá tốt nhất thị trường với chất lượng đảm bảo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="products">
+        <h2>Sản phẩm bán chạy</h2>
+        <div class="product-list"></div>
+    </section>
+
+    <!-- Product Categories -->
+    <section class="product-categories">
+        <div class="container">
+            <h2>Khám phá danh mục</h2>
+            <div class="categories-grid">
+                <a href="products.html?category=cpu" class="category-item">
+                    <img src="images/icon-cpu.png" alt="CPU">
+                    <h3>CPU</h3>
+                </a>
+                <a href="products.html?category=gpu" class="category-item">
+                    <img src="images/icon-gpu.png" alt="GPU">
+                    <h3>GPU</h3>
+                </a>
+                <a href="products.html?category=ram" class="category-item">
+                    <img src="images/icon-ram.png" alt="RAM">
+                    <h3>RAM</h3>
+                </a>
+                <a href="products.html?category=ssd" class="category-item">
+                    <img src="images/icon-ssd.png" alt="SSD">
+                    <h3>SSD</h3>
+                </a>
+                <a href="products.html?category=cpu" class="category-item">
+                    <img src="images/icon-psu.png" alt="PSU">
+                    <h3>CPU</h3>
+                </a>
+                <a href="products.html?category=gpu" class="category-item">
+                    <img src="images/icon-mainboard.png" alt="MAINBOARD">
+                    <h3>GPU</h3>
+                </a>
+                <a href="products.html?category=ram" class="category-item">
+                    <img src="images/icon-case.png" alt="CASE">
+                    <h3>RAM</h3>
+                </a>
+                <a href="products.html?category=ssd" class="category-item">
+                    <img src="images/icon-lcd.png" alt="LCD">
+                    <h3>SSD</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>Về Lộc Computer</h3>
+                <p>Có cái gì đâu mà giới thiệu hẹ hẹhẹ.</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="products.html">Sản phẩm</a></li>
+                    <li><a href="cart.html">Giỏ hàng</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Điều khoản dịch vụ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact">
+                <h3>Liên hệ</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Bây giờ đang ở bên kia sông. </p>
+                <p><i class="fas fa-phone"></i> Nào có rồi cho </p>
+                <p><i class="fas fa-envelope"></i> mail giả không àà </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Lộc Computer | All Rights Reserved
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
