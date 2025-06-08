@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -11,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // KẾT NỐI MONGODB VÀ ĐỊNH NGHĨA MODEL
-const DB_URI = 'mongodb+srv://blieshire:Kazuha0908.@lc-company-cluster.tdamuxp.mongodb.net/?retryWrites=true&w=majority&appName=lc-company-cluster';
+const DB_URI = process.env.DB_URI;
 
 // Kết nối tới MongoDB
 mongoose.connect(DB_URI, {
