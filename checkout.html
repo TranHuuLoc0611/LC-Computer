@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - PC Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">PC Store</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="products.html">Sản phẩm</a></li>
+                    <li><a href="cart.html" id="cart-link">Giỏ hàng (0)</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="checkout-section">
+            <h1 class="text-center mb-3">Thanh Toán Đơn Hàng</h1>
+            <div class="checkout-content">
+                <div class="shipping-info">
+                    <h2>Thông tin giao hàng</h2>
+                    <form id="checkout-form">
+                        <div class="form-group">
+                            <label for="fullName">Họ và tên:</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại:</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Địa chỉ:</label>
+                            <input type="text" id="address" name="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Ghi chú (tùy chọn):</label>
+                            <textarea id="notes" name="notes" rows="3"></textarea>
+                        </div>
+
+                        <h3>Phương thức thanh toán</h3>
+                        <div class="payment-options">
+                            <div class="radio-group">
+                                <input type="radio" id="cod" name="paymentMethod" value="COD" checked>
+                                <label for="cod">Thanh toán khi nhận hàng (COD)</label>
+                            </div>
+                            <div class="radio-group">
+                                <input type="radio" id="bankTransfer" name="paymentMethod" value="Bank Transfer">
+                                <label for="bankTransfer">Chuyển khoản ngân hàng</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Xác nhận Đặt hàng</button>
+                    </form>
+                </div>
+
+                <div class="order-summary">
+                    <h2>Tóm tắt đơn hàng</h2>
+                    <div id="checkout-cart-items">
+                    </div>
+                    <div class="order-total">
+                        <strong>Tổng cộng:</strong> <span id="checkout-total-price">0₫</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PC Store. All rights reserved.</p>
+            <ul class="footer-nav">
+                <li><a href="#">Chính sách bảo mật</a></li>
+                <li><a href="#">Điều khoản dịch vụ</a></li>
+                <li><a href="#">Về chúng tôi</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

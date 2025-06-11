@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 const DB_URI = process.env.DB_URI;
 
 // Kết nối tới MongoDB
+mongoose.set('strictQuery', true);
 mongoose.connect(DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -36,6 +37,30 @@ const productSchema = new mongoose.Schema({
 
 // Tạo Product Model từ Schema
 const Product = mongoose.model('Product', productSchema);
+
+// Định nghĩa Schema và Model cho Order
+const orderItemSchema = new mongoose.Schema({
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    name: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    price: { type: Number, required: true },
+    image: { type: String }
+});
+
+const orderSchema = new mongoose.Schema({
+    fullName: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: { type: String, required: true },
+    notes: { type: String },
+    paymentMethod: { type: String, required: true, enum: ['COD', 'Bank Transfer'] }, // Ví dụ: COD, Bank Transfer
+    items: [orderItemSchema], // Mảng các sản phẩm trong đơn hàng
+    totalAmount: { type: Number, required: true },
+    orderDate: { type: Date, default: Date.now },
+    status: { type: String, default: 'Pending', enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'] }
+});
+
+const Order = mongoose.model('Order', orderSchema);
 
 // Định tuyến (Routes)
 // Route mặc định cho trang chủ
@@ -66,6 +91,45 @@ app.get('/api/products', async (req, res) => {
     } catch (error) {
         console.error('Lỗi khi lấy sản phẩm:', error);
         res.status(500).json({ message: 'Lỗi server khi lấy sản phẩm.' });
+    }
+});
+
+// API để xử lý đặt hàng
+app.post('/api/orders', async (req, res) => {
+    try {
+        const { fullName, email, phone, address, notes, paymentMethod, items, totalAmount } = req.body;
+
+        // Kiểm tra dữ liệu cần thiết
+        if (!fullName || !email || !phone || !address || !paymentMethod || !items || items.length === 0 || !totalAmount) {
+            return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin đơn hàng và giỏ hàng không được trống.' });
+        }
+
+        // Kiểm tra xem các item trong giỏ hàng có đủ thông tin cần thiết không
+        const validItems = items.map(item => ({
+            productId: item.id, // Giả định id của sản phẩm frontend là _id của sản phẩm backend
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image
+        }));
+
+        const newOrder = new Order({
+            fullName,
+            email,
+            phone,
+            address,
+            notes,
+            paymentMethod,
+            items: validItems,
+            totalAmount
+        });
+
+        await newOrder.save();
+        res.status(201).json({ message: 'Đặt hàng thành công!', order: newOrder });
+
+    } catch (error) {
+        console.error('Lỗi khi đặt hàng:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại sau.', error: error.message });
     }
 });
 
@@ -104,7 +168,7 @@ async function insertSampleProducts() {
                 id: 'ssd_samsung_970_evo_1tb',
                 name: 'Ổ cứng SSD Samsung 970 EVO Plus 1TB NVMe M.2',
                 price: 2800000,
-                image: 'images/ssd-samsung-970.jpg',
+                image: 'images/ssd-samsung.jpg',
                 description: 'Ổ cứng SSD NVMe tốc độ cao cho hiệu suất vượt trội.',
                 category: 'SSD',
                 specs: { "Capacity": "1TB", "Form_Factor": "M.2 2280", "Interface": "PCIe Gen 3.0 x4 NVMe", "Read_Speed": "Up to 3,500 MB/s" }
