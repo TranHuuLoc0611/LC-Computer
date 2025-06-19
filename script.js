@@ -15,6 +15,92 @@ function updateCartCount() {
     }
 }
 
+// Hàm hỗ trợ xóa sản phẩm khỏi giỏ hàng
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    saveCart();
+    renderCartItems(); // Render lại giỏ hàng sau khi xóa
+    updateCartCount(); // Cập nhật số lượng trên header
+}
+
+// Gắn sự kiện cho các nút trong giỏ hàng (tăng/giảm số lượng, xóa từng cái)
+function attachCartItemListeners() {
+    // Nút Tăng số lượng (+)
+    document.querySelectorAll('.increase-quantity').forEach(button => {
+        // Sử dụng .onclick thay vì .addEventListener để tránh gắn sự kiện trùng lặp
+        // mỗi khi renderCartItems được gọi
+        button.onclick = (event) => {
+            const productId = event.target.dataset.id; // Lấy data-id từ nút
+            const item = cart.find(p => p.id === productId);
+            if (item) {
+                item.quantity++;
+                saveCart();
+                renderCartItems(); // Render lại giỏ hàng để cập nhật hiển thị và tổng tiền
+                updateCartCount(); // Cập nhật số lượng trên header
+            }
+        };
+    });
+
+    // Nút Giảm số lượng (-)
+    document.querySelectorAll('.decrease-quantity').forEach(button => {
+        button.onclick = (event) => {
+            const productId = event.target.dataset.id;
+            const item = cart.find(p => p.id === productId);
+            if (item && item.quantity > 1) { // Chỉ giảm nếu số lượng lớn hơn 1
+                item.quantity--;
+                saveCart();
+                renderCartItems();
+                updateCartCount();
+            } else if (item && item.quantity === 1) {
+                // Nếu số lượng là 1 và người dùng bấm giảm, hỏi xác nhận và xóa sản phẩm
+                if (confirm(`Bạn có muốn xóa "${item.name}" khỏi giỏ hàng không?`)) {
+                    removeFromCart(productId);
+                }
+            }
+        };
+    });
+
+    // Nút Xóa từng sản phẩm (bên cạnh mỗi item)
+    document.querySelectorAll('.remove-item-btn').forEach(button => {
+        button.onclick = (event) => {
+            const productId = event.target.dataset.id;
+            const itemToRemove = cart.find(item => item.id === productId);
+            if (itemToRemove && confirm(`Bạn có chắc chắn muốn xóa "${itemToRemove.name}" khỏi giỏ hàng không?`)) {
+                removeFromCart(productId);
+            }
+        };
+    });
+
+    // Nút Xóa tất cả giỏ hàng (nút lớn ở dưới tổng tiền)
+    const clearCartBtn = document.getElementById('clear-cart-btn');
+    if (clearCartBtn) {
+        clearCartBtn.onclick = () => {
+            if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng không?')) {
+                cart = []; // Xóa toàn bộ mảng giỏ hàng
+                saveCart();
+                renderCartItems(); // Render lại để hiển thị giỏ hàng trống
+                updateCartCount(); // Cập nhật số lượng trên header thành 0
+            }
+        };
+    }
+
+    // Xử lý nút "Tiến hành thanh toán" trên cart.html
+    const proceedToCheckoutBtn = document.querySelector('.btn-checkout[href="checkout.html"]');
+    if (proceedToCheckoutBtn) {
+        // Nếu đây là thẻ <a>, nó tự chuyển hướng, không cần JS.
+        // Nhưng nếu bạn đổi sang <button> với id như đã đề xuất trước đó, thì sẽ cần event listener.
+        // Giả sử vẫn là thẻ <a> với href, nó sẽ tự hoạt động.
+        // Nếu không, hãy đổi thành button và thêm listener:
+        /*
+        proceedToCheckoutBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // Ngăn hành vi mặc định của link nếu bạn muốn thêm logic trước
+            window.location.href = 'checkout.html';
+        });
+        */
+        // Bỏ comment dòng trên nếu bạn muốn nút checkout là button và điều hướng bằng JS
+    }
+}
+
 // Hiển thị giỏ hàng (trang cart.html)
 function renderCartItems() {
     const cartItemsContainer = document.getElementById('cart-items');
@@ -29,7 +115,18 @@ function renderCartItems() {
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-cart">Giỏ hàng trống!</p>';
         totalPriceElement.textContent = '0₫';
+        // Khi giỏ hàng trống, đảm bảo các nút cũng bị ẩn/vô hiệu hóa nếu cần
+        const clearCartBtn = document.getElementById('clear-cart-btn');
+        if (clearCartBtn) clearCartBtn.style.display = 'none'; // Ẩn nút xóa tất cả
+        const checkoutBtn = document.querySelector('.btn-checkout');
+        if (checkoutBtn) checkoutBtn.style.display = 'none'; // Ẩn nút thanh toán
         return;
+    } else {
+        // Hiện lại các nút nếu có sản phẩm trong giỏ
+        const clearCartBtn = document.getElementById('clear-cart-btn');
+        if (clearCartBtn) clearCartBtn.style.display = ''; // Hiện nút xóa tất cả
+        const checkoutBtn = document.querySelector('.btn-checkout');
+        if (checkoutBtn) checkoutBtn.style.display = ''; // Hiện nút thanh toán
     }
 
     let total = 0;
@@ -41,48 +138,55 @@ function renderCartItems() {
 
         const itemElement = document.createElement('div');
         itemElement.className = 'cart-item';
+        // Thêm data-id vào phần tử cha .cart-item để dễ dàng thao tác sau này
+        itemElement.setAttribute('data-id', item.id);
+
         itemElement.innerHTML = `
-            <img src="${item.image || 'https://via.placeholder.com/60x60?text=No+Image'}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; margin-right: 1rem;">
-            <div>
-                <h3>${item.name || 'Sản phẩm không tên'}</h3>
-                <p>${(item.price || 0).toLocaleString('vi-VN')}₫ x ${item.quantity}</p>
+            <img src="${item.image || 'https://via.placeholder.com/90x90?text=No+Image'}" alt="${item.name}">
+            <div class="cart-item-details">
+                <h4>${item.name || 'Sản phẩm không tên'}</h4>
+                <p class="cart-item-price">${(item.price || 0).toLocaleString('vi-VN')}₫</p>
+                <div class="quantity-controls">
+                    <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
+                </div>
             </div>
-            <button class="remove-item" data-id="${item.id}">Xóa</button>
+            <button class="remove-item-btn" data-id="${item.id}">Xóa</button>
         `;
         cartItemsContainer.appendChild(itemElement);
     });
 
     totalPriceElement.textContent = `${total.toLocaleString('vi-VN')}₫`; // Định dạng tổng giá
 
-    // Thêm sự kiện xóa sản phẩm
-    document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', () => {
-            // Lấy productId từ data-id (sử dụng _id)
-            const productId = button.getAttribute('data-id');
-            // Lọc giỏ hàng để xóa sản phẩm dựa trên _id
-            cart = cart.filter(item => item.id !== productId); // Cần đảm bảo item.id là _id
-            saveCart();
-            renderCartItems(); // Render lại giỏ hàng sau khi xóa
-            updateCartCount(); // Cập nhật số lượng trên header
-        });
-    });
+    // ************* ĐIỂM QUAN TRỌNG NHẤT CẦN THAY ĐỔI *************
+    // GỌI HÀM GẮN SỰ KIỆN SAU KHI TẤT CẢ CÁC NÚT (BAO GỒM +, -, XÓA) ĐƯỢC RENDER VÀO DOM!
+    attachCartItemListeners();
+    // ************************************************************
 }
 
 // Hàm hiển thị giỏ hàng trên trang thanh toán (checkout.html)
 function renderCheckoutCartItems() {
     const checkoutItemsContainer = document.getElementById('checkout-cart-items');
     const checkoutTotalPriceElement = document.getElementById('checkout-total-price');
+    const checkoutForm = document.getElementById('checkout-form'); // Lấy thêm form để ẩn/hiện
 
     // Kiểm tra xem các phần tử có tồn tại trên trang không
-    if (!checkoutItemsContainer || !checkoutTotalPriceElement) {
-        console.warn('Elements for checkout cart items or total price not found on this page.');
+    if (!checkoutItemsContainer || !checkoutTotalPriceElement || !checkoutForm) {
+        console.warn('Elements for checkout cart items, total price, or form not found on this page. Are you on checkout.html?');
         return;
     }
 
     if (cart.length === 0) {
-        checkoutItemsContainer.innerHTML = '<p class="empty-cart">Giỏ hàng trống!</p>';
+        checkoutItemsContainer.innerHTML = `
+            <p class="empty-cart-checkout">Giỏ hàng trống!
+            <br>Vui lòng quay lại <a href="products.html">trang sản phẩm</a> để thêm hàng.</p>
+        `;
         checkoutTotalPriceElement.textContent = '0₫';
+        checkoutForm.style.display = 'none'; // Ẩn toàn bộ form thanh toán nếu giỏ hàng trống
         return;
+    } else {
+        checkoutForm.style.display = ''; // Đảm bảo form được hiển thị nếu có sản phẩm
     }
 
     let total = 0;
@@ -95,7 +199,7 @@ function renderCheckoutCartItems() {
         const itemElement = document.createElement('div');
         itemElement.className = 'checkout-cart-item'; // Class này đã được thêm CSS
         itemElement.innerHTML = `
-            <img src="${item.image || 'https://via.placeholder.com/50x50?text=No+Image'}" alt="${item.name}">
+            <img src="${item.image || 'https://via.placeholder.com/60x60?text=No+Image'}" alt="${item.name}">
             <div class="checkout-cart-item-details">
                 <h4>${item.name}</h4>
                 <p>${(item.price || 0).toLocaleString('vi-VN')}₫ x ${item.quantity}</p>
@@ -111,7 +215,7 @@ function renderCheckoutCartItems() {
 function attachAddToCartListeners() {
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', (event) => {
-            const productElement = event.target.closest('.product');
+            const productElement = event.target.closest('.product-card');
             const productId = productElement.getAttribute('data-id'); // Đây là _id từ MongoDB
 
             // Lấy thông tin sản phẩm trực tiếp từ các phần tử con của productElement
@@ -211,22 +315,37 @@ async function fetchAndDisplayProducts(containerSelector, limit = null) {
 
 // Cập nhật giỏ hàng và render sản phẩm khi trang được tải
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.querySelector('#cart-items')) { // Nếu đang ở trang giỏ hàng
-        renderCartItems();
-    }
+    // Luôn cập nhật số lượng giỏ hàng trên header khi DOMContentLoaded
+    // Điều này cần cho tất cả các trang có header chứa cart-link
     updateCartCount();
 
+    // Render giỏ hàng trên trang cart.html
+    if (document.querySelector('#cart-items')) {
+        renderCartItems();
+    }
     // Render sản phẩm trên trang chủ (ví dụ 3 sản phẩm nổi bật)
-    if (document.querySelector('body.home-page .products .product-list')) { // Thêm class 'home-page' vào body của index.html
+    else if (document.querySelector('body.home-page .products .product-list')) {
         fetchAndDisplayProducts('body.home-page .products .product-list', 3); // Lấy 3 sản phẩm
     }
     // Render tất cả sản phẩm trên trang sản phẩm
-    else if (document.querySelector('body.products-page .products .product-list')) { // Thêm class 'products-page' vào body của products.html
+    else if (document.querySelector('body.products-page .products .product-list')) {
         fetchAndDisplayProducts('body.products-page .products .product-list'); // Lấy tất cả sản phẩm
     }
     // Render giỏ hàng trên trang thanh toán (checkout.html)
-    else if (document.querySelector('#checkout-form')) { // Nếu đang ở trang thanh toán
+    else if (document.querySelector('#checkout-form')) {
         renderCheckoutCartItems();
+    }
+
+    // Thêm sự kiện cho nút "Thanh toán" trên trang giỏ hàng (cart.html)
+    const checkoutBtn = document.getElementById('checkout-btn'); // Tìm cái nút "Thanh toán" bằng ID của nó
+    if (checkoutBtn) { // Nếu tìm thấy cái nút đó
+        checkoutBtn.addEventListener('click', () => { // Thì khi nó được bấm
+            if (cart.length === 0) { // Kiểm tra xem giỏ hàng có rỗng không
+                alert('Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi thanh toán.'); // Rỗng thì báo lỗi
+            } else {
+                window.location.href = '/checkout.html'; // KHÔNG RỖNG thì chuyển sang trang checkout.html
+            }
+        });
     }
 
     // Xử lý form thanh toán (checkout form)
@@ -235,21 +354,49 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
 
-            // Lấy thông tin từ form
+            // Lấy nút xác nhận đặt hàng để vô hiệu hóa khi submit
+            const placeOrderBtn = checkoutForm.querySelector('.btn-place-order');
+            if (placeOrderBtn) {
+                placeOrderBtn.disabled = true;
+                placeOrderBtn.textContent = 'Đang xử lý...';
+            }
+
+            // Thu thập thông tin khách hàng từ form
             const formData = new FormData(checkoutForm);
+            const customerInfo = {};
+            for (let [key, value] of formData.entries()) {
+                customerInfo[key] = value;
+            }
+
+            // KIỂM TRA CÁC TRƯỜNG BẮT BUỘC
+            if (!customerInfo.fullName || !customerInfo.email || !customerInfo.phone || !customerInfo.address) {
+                alert('Vui lòng điền đầy đủ các thông tin bắt buộc (Họ và tên, Email, Số điện thoại, Địa chỉ).');
+                // Re-enable nút nếu có lỗi
+                if (placeOrderBtn) {
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.textContent = 'Xác nhận đặt hàng';
+                }
+                return; // Dừng hàm nếu thiếu thông tin
+            }
+
+            // Tạo đối tượng đơn hàng
+            // Chúng ta sẽ lấy TỪNG trường thông tin khách hàng từ customerInfo
+            // và đưa chúng vào cấp độ GỐC của orderData
             const orderData = {
-                fullName: formData.get('fullName'),
-                email: formData.get('email'),
-                phone: formData.get('phone'),
-                address: formData.get('address'),
-                notes: formData.get('notes'),
-                paymentMethod: formData.get('paymentMethod'),
-                items: cart, // Gửi toàn bộ giỏ hàng hiện tại
+                fullName: customerInfo.fullName,
+                email: customerInfo.email,
+                phone: customerInfo.phone,
+                address: customerInfo.address,
+                notes: customerInfo.notes,
+                // Sửa thành 'COD' để khớp với enum của server
+                paymentMethod: 'COD', // <--- DÒNG BẠN CẦN THAY ĐỔI!
+                items: cart,
                 totalAmount: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
             };
 
             try {
-                const response = await fetch('/api/orders', {
+                // Gửi dữ liệu đơn hàng lên server
+                const response = await fetch('/api/orders', { // Đảm bảo URL này đúng với server của bạn
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -264,7 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi đặt hàng thành công
                     cart = []; // Cập nhật biến cart trong bộ nhớ
                     updateCartCount(); // Cập nhật số lượng giỏ hàng trên header
-                    // Tùy chọn: Chuyển hướng người dùng đến trang xác nhận đơn hàng hoặc trang chủ
                     window.location.href = '/'; // Chuyển về trang chủ
                 } else {
                     // Xử lý lỗi từ server (ví dụ: thiếu thông tin)
@@ -273,6 +419,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('Lỗi khi gửi đơn hàng:', error);
                 alert('Không thể kết nối đến server để đặt hàng. Vui lòng thử lại sau.');
+            } finally {
+                // Luôn re-enable nút sau khi request hoàn tất (thành công hoặc lỗi)
+                if (placeOrderBtn) {
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.textContent = 'Xác nhận đặt hàng';
+                }
             }
         });
     }

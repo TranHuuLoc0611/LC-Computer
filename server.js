@@ -40,7 +40,8 @@ const Product = mongoose.model('Product', productSchema);
 
 // Định nghĩa Schema và Model cho Order
 const orderItemSchema = new mongoose.Schema({
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    // THAY ĐỔI DÒNG NÀY:
+    productId: { type: String, required: true }, // <--- Sửa từ mongoose.Schema.Types.ObjectId THÀNH String
     name: { type: String, required: true },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
@@ -168,7 +169,7 @@ async function insertSampleProducts() {
                 id: 'ssd_samsung_970_evo_1tb',
                 name: 'Ổ cứng SSD Samsung 970 EVO Plus 1TB NVMe M.2',
                 price: 2800000,
-                image: 'images/ssd-samsung.jpg',
+                image: 'images/ssd-samsung-970.jpg',
                 description: 'Ổ cứng SSD NVMe tốc độ cao cho hiệu suất vượt trội.',
                 category: 'SSD',
                 specs: { "Capacity": "1TB", "Form_Factor": "M.2 2280", "Interface": "PCIe Gen 3.0 x4 NVMe", "Read_Speed": "Up to 3,500 MB/s" }

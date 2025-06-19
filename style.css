@@ -629,3 +629,397 @@ footer .social-icons a:hover {
         width: 100%; /* Chiếm toàn bộ chiều rộng có sẵn */
     }
 }
+
+/* Banner */
+.banner {
+    width: 100%; /* Đảm bảo section banner chiếm toàn bộ chiều rộng */
+    overflow: hidden; /* Đảm bảo không có nội dung tràn ra ngoài */
+}
+
+.banner img {
+    width: 100%; /* Ảnh sẽ co giãn theo chiều rộng của phần tử cha (.banner) */
+    height: auto; /* Chiều cao tự động điều chỉnh để giữ tỷ lệ khung hình */
+    display: block; /* Loại bỏ khoảng trống dưới ảnh (do mặc định là inline) */
+}
+
+/* style.css */
+
+/* --- GIỎ HÀNG (cart.html) --- */
+
+.cart-section {
+    padding: 4rem 0;
+    background-color: #f8f8f8; /* Nền nhẹ nhàng cho section */
+    text-align: center; /* Căn giữa tiêu đề */
+}
+
+.cart-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+    color: #2c3e50;
+    text-transform: uppercase;
+}
+
+.cart-items-container {
+    max-width: 900px; /* Giới hạn chiều rộng của giỏ hàng */
+    margin: 0 auto 2rem auto; /* Căn giữa và khoảng cách dưới */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ */
+    padding: 2rem;
+}
+
+/* Từng sản phẩm trong giỏ */
+.cart-item {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 1.5rem; /* Khoảng cách giữa các phần tử */
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #eee; /* Đường kẻ phân cách */
+    position: relative; /* Để căn chỉnh nút xóa tuyệt đối nếu cần */
+}
+
+.cart-item:last-child {
+    border-bottom: none; /* Bỏ đường kẻ ở sản phẩm cuối */
+}
+
+.cart-item img {
+    width: 90px; /* Kích thước ảnh sản phẩm trong giỏ */
+    height: 90px;
+    object-fit: contain; /* Giữ tỷ lệ ảnh */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    flex-shrink: 0; /* Ngăn ảnh co lại khi không gian hẹp */
+}
+
+.cart-item-details {
+    flex-grow: 1; /* Chiếm phần lớn không gian còn lại */
+    text-align: left;
+}
+
+.cart-item-details h4 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 0.4rem;
+}
+
+.cart-item-details p {
+    font-size: 1rem;
+    color: #e74c3c; /* Màu đỏ cho giá */
+    font-weight: bold;
+}
+
+/* Điều khiển số lượng */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem; /* Khoảng cách giữa các nút và số lượng */
+    margin-top: 0.6rem;
+}
+
+.quantity-controls button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    color: #555;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%; /* Nút tròn */
+    cursor: pointer;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.quantity-controls button:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+.quantity-controls span {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    min-width: 30px; /* Đảm bảo đủ không gian cho số lượng */
+    text-align: center;
+}
+
+/* Nút xóa từng sản phẩm */
+.remove-item-btn {
+    background-color: #ff6b6b; /* Màu đỏ tươi */
+    color: white;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease-in-out;
+    align-self: center; /* Căn giữa nút xóa theo chiều dọc của item */
+    margin-left: auto; /* Đẩy nút sang phải */
+}
+
+.remove-item-btn:hover {
+    background-color: #ee5253;
+}
+
+/* Tóm tắt giỏ hàng */
+.cart-summary {
+    max-width: 900px;
+    margin: 2rem auto 0 auto; /* Khoảng cách trên và căn giữa */
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* Khoảng cách giữa các phần tử */
+}
+
+.cart-summary p {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0;
+}
+
+#total-price {
+    color: #e74c3c;
+    font-size: 2rem; /* Giá trị tổng to hơn */
+}
+
+/* Các nút hành động trong giỏ hàng */
+.btn-clear-cart,
+.btn-checkout {
+    display: block; /* Mỗi nút một dòng */
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none; /* Quan trọng nếu là thẻ a */
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.btn-clear-cart {
+    background-color: #a4b0be; /* Màu xám hiện đại */
+    color: white;
+    border: none;
+    margin-bottom: 0.8rem;
+}
+
+.btn-clear-cart:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px); /* Hiệu ứng nhấc lên */
+}
+
+.btn-checkout {
+    background-color: #2ecc71; /* Màu xanh lá cây tươi tắn */
+    color: white;
+    border: none;
+}
+
+.btn-checkout:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+/* Thông báo giỏ hàng trống */
+.empty-cart {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #777;
+    padding: 3rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+/* style.css */
+
+/* --- TRANG THANH TOÁN (checkout.html) --- */
+
+.checkout-section {
+    padding: 4rem 0;
+    background-color: #f8f8f8;
+}
+
+.checkout-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+    color: #2c3e50;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.checkout-container {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các khối xuống dòng trên màn hình nhỏ */
+    gap: 2.5rem; /* Khoảng cách giữa các cột */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.checkout-form-container,
+.order-summary-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+}
+
+.checkout-form-container {
+    flex: 2; /* Chiếm 2 phần không gian */
+    min-width: 300px; /* Đảm bảo không quá nhỏ */
+}
+
+.order-summary-container {
+    flex: 1; /* Chiếm 1 phần không gian */
+    min-width: 280px; /* Đảm bảo không quá nhỏ */
+}
+
+.checkout-form h3,
+.order-summary-container h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.2rem;
+    text-align: left; /* Căn trái label và input */
+}
+
+.form-group label {
+    display: block; /* Đặt label trên một dòng riêng */
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group textarea:focus {
+    border-color: #2ecc71; /* Màu xanh khi focus */
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical; /* Cho phép thay đổi kích thước theo chiều dọc */
+    min-height: 80px;
+}
+
+/* Order Summary Items (similar to cart items but simpler) */
+.checkout-cart-items {
+    margin-bottom: 1.5rem;
+}
+
+.checkout-cart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed #eee; /* Đường kẻ nét đứt */
+}
+
+.checkout-cart-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-cart-item img {
+    width: 60px; /* Kích thước ảnh nhỏ hơn trong tóm tắt */
+    height: 60px;
+    object-fit: contain;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.checkout-cart-item-details {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.checkout-cart-item-details h4 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 0.2rem;
+}
+
+.checkout-cart-item-details p {
+    font-size: 0.95rem;
+    color: #777;
+}
+
+/* Order Total */
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    margin-top: 1.5rem;
+}
+
+.order-total span {
+    color: #e74c3c; /* Màu đỏ cho tổng tiền */
+    font-size: 1.8rem;
+}
+
+/* Place Order Button */
+.btn-place-order {
+    background-color: #28a745; /* Màu xanh lá cây đậm */
+    color: white;
+    border: none;
+    padding: 1.2rem 2rem;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 2rem;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.btn-place-order:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .checkout-container {
+        flex-direction: column; /* Xếp chồng các cột trên màn hình nhỏ */
+        gap: 2rem;
+    }
+
+    .checkout-form-container,
+    .order-summary-container {
+        flex: none; /* Bỏ flex để chúng chiếm toàn bộ chiều rộng */
+        width: 100%;
+    }
+}
